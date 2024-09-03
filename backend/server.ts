@@ -1,13 +1,11 @@
 import dotenv from "dotenv";
-import express from "express";
-
-import { connectMongoDB } from "./database/connect.db.js";
-import authRoutes from "./routes/auth.routes.js";
+import express, { Express } from "express";
 import cookieParser from "cookie-parser";
-
+import { connectMongoDB } from "./database/connectDb";
+import authRoutes from "./routes/auth.routes";
 dotenv.config();
 
-const app = express();
+const app: Express = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
