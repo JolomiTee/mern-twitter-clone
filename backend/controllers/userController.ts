@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import User from "../models/user.model";
 import Notification from "../models/notification.model";
 import bcrypt from "bcryptjs";
+import { v2 as cloudinary } from "cloudinary";
+
 export const getUserProfile = async (req: any, res: Response) => {
 	const { username } = req.params;
 
@@ -96,22 +98,28 @@ export const getSuggestedUser = async (req: any, res: Response) => {
 export const updateUserProfile = async (req: any, res: Response) => {
 	const { fullName, email, username, currentPassword, newPassword, bio, link } =
 		req.body;
-	let { profileImg, coverImage } = req.body;
+	let { profileImage, coverImage } = req.body;
 
 	const userId = req.user._id;
 
 	try {
-		const user = await User.findById(userId);
+		let user = await User.findById(userId);
 		if (!user) return res.status(404).json({ message: "USer not found" });
 
-		if (!newPassword || currentPassword || (!currentPassword && newPassword)) {
-			return res
-				.status(400)
-				.json({ error: "Please provide both current and new Password" });
+		if (
+			(!newPassword && currentPassword) ||
+			(!currentPassword && newPassword)
+		) {
+			return res.status(400).json({
+				error: "Please provide both current password and new password",
+			});
 		}
 
 		if (currentPassword && newPassword) {
-			const isMatch = await bcrypt.compare(currentPassword, user.password);
+			const isMatch = await bcrypt.compare(
+				currentPassword,
+				user.password || ""
+			);
 			if (!isMatch)
 				return res.status(400).json({ error: "Current password is incorrect" });
 			if (newPassword.length < 6)
@@ -122,10 +130,57 @@ export const updateUserProfile = async (req: any, res: Response) => {
 			user.password = await bcrypt.hash(newPassword, salt);
 		}
 
-		if (profileImg) {
+		if (profileImage) {
+			if (user.profileImg) {
+				const publicId = user.profileImg.split("/").pop()?.split(".")[0];
+
+				if (publicId) {
+					await cloudinary.uploader.destroy(publicId);
+				} else {
+					res.status(400).json({
+						error: "Public ID could not be determined for the profile image.",
+					});
+				}
+			}
+
+			const uploadedResponse = await cloudinary.uploader.upload(profileImage);
+			profileImage = uploadedResponse.secure_url;
 		}
 
 		if (coverImage) {
+			if (user.coverImg) {
+				const publicId = user.coverImg.split("/").pop()?.split(".")[0];
+
+				if (publicId) {
+					await cloudinary.uploader.destroy(publicId);
+				} else {
+					res.status(400).json({
+						error: "Public ID could not be determined for the cover image.",
+					});
+				}
+			}
+			const uploadedResponse = await cloudinary.uploader.upload(coverImage);
+			coverImage = uploadedResponse.secure_url;
 		}
-	} catch (error) {}
+
+		user.fullName = fullName || user.fullName;
+		user.email = email || user.email;
+		user.username = username || user.username;
+		user.bio = bio || user.bio;
+		user.link = link || user.link;
+		user.profileImg = profileImage || user.profileImg;
+		user.coverImg = coverImage || user.coverImg;
+
+		const updatedUser = await user.save();
+
+		updatedUser.password = "";
+
+		return res.status(200).json(updatedUser);
+	} catch (error) {
+		console.log(
+			"Error in updateUserProfile controller",
+			(error as Error).message
+		);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
 };

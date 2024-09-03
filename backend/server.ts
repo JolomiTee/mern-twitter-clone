@@ -12,7 +12,7 @@ dotenv.config();
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUDNAME,
 	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET, // Click 'View API Keys' above to copy your API secret
+	api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 const app: Express = express();
 const PORT = process.env.PORT;
