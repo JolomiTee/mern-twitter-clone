@@ -10,14 +10,13 @@ const userSchema = new mongoose.Schema(
 		fullName: {
 			type: String,
 			required: true,
-			unique: true,
 		},
 		password: {
 			type: String,
 			required: true,
-			minLength: true,
+			minLength: 6,
 		},
-		username: {
+		email: {
 			type: String,
 			required: true,
 			unique: true,
@@ -36,11 +35,11 @@ const userSchema = new mongoose.Schema(
 				default: [],
 			},
 		],
-		following: {
+		profileImg: {
 			type: String,
-			default: [],
+			default: "",
 		},
-		coverImage: {
+		coverImg: {
 			type: String,
 			default: "",
 		},
@@ -48,10 +47,18 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: "",
 		},
+
 		link: {
 			type: String,
 			default: "",
 		},
+		likedPosts: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Post",
+				default: [],
+			},
+		],
 	},
 	{ timestamps: true }
 );
