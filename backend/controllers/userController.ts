@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import User from "../models/user.model";
 import Notification from "../models/notification.model";
 import bcrypt from "bcryptjs";

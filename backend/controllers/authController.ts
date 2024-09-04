@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { generateTokenAndSetCookie } from "../lib/utils/generateToken";
 import User from "../models/user.model";
 import bcrypt from "bcryptjs";
 
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req: any, res: Response) => {
 	try {
 		const { fullName, username, email, password } = req.body;
 
@@ -61,7 +61,7 @@ export const signup = async (req: Request, res: Response) => {
 	}
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: any, res: Response) => {
 	try {
 		const { username, password } = req.body;
 
@@ -95,7 +95,7 @@ export const login = async (req: Request, res: Response) => {
 	}
 };
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (req: any, res: Response) => {
 	try {
 		res.cookie("jwt", "", {
 			maxAge: 0,
