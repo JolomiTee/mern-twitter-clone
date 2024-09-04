@@ -50,7 +50,7 @@ export const createPost = async (req: any, res: Response) => {
 	}
 };
 
-export const getAllPosts = async (req: Request, res: Response) => {
+export const getAllPosts = async (req: any, res: Response) => {
 	try {
 		const posts = await Post.find()
 			.sort({ createdAt: -1 })
@@ -73,9 +73,9 @@ export const getAllPosts = async (req: Request, res: Response) => {
 	}
 };
 
-export const getFollowingPosts = async (req: Request, res: Response) => {};
+export const getFollowingPosts = async (req: any, res: Response) => {};
 
-export const getLikedPosts = async (req: Request, res: Response) => {
+export const getLikedPosts = async (req: any, res: Response) => {
 	const userId = req.params.id;
 	try {
 		const user = await User.findById(userId);
@@ -91,9 +91,9 @@ export const getLikedPosts = async (req: Request, res: Response) => {
 	}
 };
 
-export const getUserPosts = async (req: Request, res: Response) => {};
+export const getUserPosts = async (req: any, res: Response) => {};
 
-export const likeUnlikePost = async (req: Request, res: Response) => {
+export const likeUnlikePost = async (req: any, res: Response) => {
 	try {
 		const userId = req.user._id;
 		const { id: postId } = req.params;
