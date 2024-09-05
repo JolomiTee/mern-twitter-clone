@@ -16,8 +16,7 @@ interface SignUpData {
 }
 
 interface SignUpResponse {
-	message: string;
-	token?: string; // Assuming the API returns a token on successful signup
+	[key: string]: any;
 }
 
 const useSignUpMutation = (): UseMutationResult<
