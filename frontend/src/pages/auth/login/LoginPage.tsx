@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 
 import { MdOutlineMail, MdPassword } from "react-icons/md";
 
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import {
+	useMutation,
+	UseMutationResult,
+	useQueryClient,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import XSvg from "../../../components/svgs/X";
 
@@ -21,6 +25,8 @@ const useLoginMutation = (): UseMutationResult<
 	Error,
 	LoginData
 > => {
+	const queryClient = useQueryClient();
+
 	return useMutation<LoginResponse, Error, LoginData>({
 		mutationFn: async ({ username, password }) => {
 			try {
@@ -51,6 +57,8 @@ const useLoginMutation = (): UseMutationResult<
 		},
 		onSuccess() {
 			toast.success("Logged in successfully");
+			// refetch auth user to update UI
+			queryClient.invalidateQueries({ queryKey: ["authUser"] });
 		},
 	});
 };
