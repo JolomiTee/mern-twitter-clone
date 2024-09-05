@@ -11,16 +11,21 @@ import { toast } from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import { formatPostDate } from "../../utils/date";
 
+interface AuthUser {
+	[key: string]: any;
+}
+
 const Post = ({ post }: any) => {
 	const [comment, setComment] = useState("");
-	const { data: authUser } = useQuery({ queryKey: ["authUser"] });
-	const queryClient = useQueryClient();
-	const postOwner = post.user;
-	let isLiked;
-	// = post.likes.includes(authUser._id);
+	const { data: authUser } = useQuery<AuthUser>({ queryKey: ["authUser"] });
 
-	let isMyPost;
-	// = authUser._id === post.user._id;
+	if (!authUser) return <div>Loading...</div>;
+
+	const postOwner = post.user;
+	let isLiked = post.likes.includes(authUser._id);
+	let isMyPost = authUser._id === post.user._id;
+
+	const queryClient = useQueryClient();
 
 	const formattedDate = formatPostDate(post.createdAt);
 
@@ -37,7 +42,7 @@ const Post = ({ post }: any) => {
 				}
 				return data;
 			} catch (error) {
-				// throw new Error(error);
+				throw new Error((error as Error).message);
 			}
 		},
 		onSuccess: () => {
@@ -58,7 +63,7 @@ const Post = ({ post }: any) => {
 				}
 				return data;
 			} catch (error) {
-				// throw new Error(error);
+				throw new Error((error as Error).message);
 			}
 		},
 		onSuccess: (updatedLikes) => {
@@ -97,7 +102,7 @@ const Post = ({ post }: any) => {
 				}
 				return data;
 			} catch (error) {
-				// throw new Error(error);
+				throw new Error((error as Error).message);
 			}
 		},
 		onSuccess: () => {
