@@ -18,6 +18,7 @@ import { useQuery } from "@tanstack/react-query";
 // import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
 
 import React from "react";
+import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
 
 const ProfilePage = () => {
 	const [coverImg, setCoverImg] = useState(null);
@@ -28,11 +29,14 @@ const ProfilePage = () => {
 	const profileImgRef = useRef(null);
 
 	const { username } = useParams();
+
+	const isLoading = false;
+	const isRefetching = true;
 	return (
 		<>
 			<div className="flex-[4_4_0]  border-r border-gray-700 min-h-screen ">
 				{/* HEADER */}
-				{/* {(isLoading || isRefetching) && <ProfileHeaderSkeleton />} */}
+				{(isLoading || isRefetching) && <ProfileHeaderSkeleton />}
 				{/* {!isLoading && !isRefetching && !user && (
 					<p className="text-center text-lg mt-4">User not found</p>
 				)} */}

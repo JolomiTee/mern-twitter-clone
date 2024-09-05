@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-// import LoadingSpinner from "../../components/common/LoadingSpinner";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
@@ -11,6 +11,7 @@ import { FaHeart } from "react-icons/fa6";
 import React from "react";
 
 const NotificationPage = () => {
+   const isLoading = false;
 	return (
 		<>
 			<div className="flex-[4_4_0] border-l border-r border-gray-700 min-h-screen">
@@ -30,11 +31,12 @@ const NotificationPage = () => {
 						</ul>
 					</div>
 				</div>
-				{/* {isLoading && (
+				{isLoading && (
 					<div className="flex justify-center h-full items-center">
 						<LoadingSpinner size="lg" />
 					</div>
 				)}
+				{/*
 				{notifications?.length === 0 && (
 					<div className="text-center p-4 font-bold">No notifications 🤔</div>
 				)}

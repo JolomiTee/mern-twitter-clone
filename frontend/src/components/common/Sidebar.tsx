@@ -8,7 +8,7 @@ import { BiLogOut } from "react-icons/bi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-const Sidebar = ({ authUser }: { authUser: any }) => {
+const Sidebar = ({ authUser }: any) => {
 	// const queryClient = useQueryClient();
 	// const { mutate: logout } = useMutation({
 	// 	mutationFn: async () => {
