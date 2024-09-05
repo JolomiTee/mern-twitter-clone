@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { Routes } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+	const [authUser, setauthUser] = useState(false);
+	return (
+		<div className="flex max-w-full mx-auto">
+			<Routes>
+				{authUser && <Sidebar />}
+				<Routes>
+					<Route
+						path="/"
+						element={authUser ? <HomePage /> : <Navigate to="/login" />}
+					/>
+					<Route
+						path="/login"
+						element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+					/>
+					<Route
+						path="/signup"
+						element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
+					/>
+					<Route
+						path="/notifications"
+						element={authUser ? <NotificationPage /> : <Navigate to="/login" />}
+					/>
+					<Route
+						path="/profile/:username"
+						element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+					/>
+				</Routes>
+				{authUser && <RightPanel />}
+				<Toaster />
+			</Routes>
+		</div>
+	);
+};
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
-
-export default App
+export default App;
