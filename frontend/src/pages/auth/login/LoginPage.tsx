@@ -1,21 +1,70 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { MdOutlineMail } from "react-icons/md";
-import { MdPassword } from "react-icons/md";
+import { MdOutlineMail, MdPassword } from "react-icons/md";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import XSvg from "../../../components/svgs/X";
+
+interface LoginData {
+	username: string;
+	password: string;
+}
+
+interface LoginResponse {
+	[key: string]: any;
+}
+
+const useLoginMutation = (): UseMutationResult<
+	LoginResponse,
+	Error,
+	LoginData
+> => {
+	return useMutation<LoginResponse, Error, LoginData>({
+		mutationFn: async ({ username, password }) => {
+			try {
+				const res = await fetch("/api/auth/login", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ username, password }),
+				});
+
+				if (!res.ok) {
+					// Parse the error message if possible
+					const errorData = await res.json();
+					throw new Error(errorData.error || "Error during login");
+				}
+
+				const data: LoginResponse = await res.json();
+				return data; // This resolves to the expected response type
+			} catch (error) {
+				// Type narrowing for better error handling
+				if (error instanceof Error) {
+					throw new Error(error.message);
+				} else {
+					throw new Error("An unknown error occurred.");
+				}
+			}
+		},
+		onSuccess() {
+			toast.success("Logged in successfully");
+		},
+	});
+};
 
 const LoginPage = () => {
 	const [formData, setFormData] = useState({
 		username: "",
 		password: "",
 	});
+	const { mutate: login, isError, isPending, error } = useLoginMutation();
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		// loginMutation(formData);
+		login(formData);
 	};
 
 	const handleInputChange = (e: any) => {
@@ -54,9 +103,9 @@ const LoginPage = () => {
 						/>
 					</label>
 					<button className="btn rounded-full btn-primary text-white">
-						{/* {isPending ? "Loading..." : "Login"} */}
+						{isPending ? "Loading..." : "Login"}
 					</button>
-					{/* {isError && <p className="text-red-500">{error.message}</p>} */}
+					{isError && <p className="text-red-500">{error.message}</p>}
 				</form>
 				<div className="flex flex-col gap-2 mt-4">
 					<p className="text-white text-lg">{"Don't"} have an account?</p>
