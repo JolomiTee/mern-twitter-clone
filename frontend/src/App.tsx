@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
+import SignUpPage from "./pages/auth/signup/SignUpPage";
+import LoginPage from "./pages/auth/login/LoginPage";
+import HomePage from "./pages/home/HomePage";
+import { Toaster } from "react-hot-toast";
+import NotificationPage from "./pages/notification/Notification";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 const App = () => {
 	const [authUser, setauthUser] = useState(false);
