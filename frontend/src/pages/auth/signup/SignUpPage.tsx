@@ -4,9 +4,60 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import XSvg from "../../../components/svgs/X";
+
+interface SignUpData {
+	email: string;
+	username: string;
+	password: string;
+	fullName: string;
+}
+
+interface SignUpResponse {
+	message: string;
+	token?: string; // Assuming the API returns a token on successful signup
+}
+
+const useSignUpMutation = (): UseMutationResult<
+	SignUpResponse,
+	Error,
+	SignUpData
+> => {
+	return useMutation<SignUpResponse, Error, SignUpData>({
+		mutationFn: async ({ email, username, password, fullName }) => {
+			try {
+				const res = await fetch("/api/auth/signup", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ email, username, password, fullName }),
+				});
+
+				if (!res.ok) {
+					// Parse the error message if possible
+					const errorData = await res.json();
+					throw new Error(errorData.error || "Error during sign-up");
+				}
+
+				const data: SignUpResponse = await res.json();
+				return data; // This resolves to the expected response type
+			} catch (error) {
+				// Type narrowing for better error handling
+				if (error instanceof Error) {
+					throw new Error(error.message);
+				} else {
+					throw new Error("An unknown error occurred.");
+				}
+			}
+		},
+		onSuccess() {
+			toast.success("User created successfully");
+		},
+	});
+};
 
 const SignUpPage = () => {
 	const [formData, setFormData] = useState({
@@ -16,12 +67,15 @@ const SignUpPage = () => {
 		password: "",
 	});
 
+	const { mutate, isError, isPending, error } = useSignUpMutation();
+
 	const handleInputChange = (e: any) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault(); // page won't reload
+		mutate(formData);
 	};
 	return (
 		<div className="max-w-screen-xl mx-auto flex h-screen px-10">
@@ -82,9 +136,9 @@ const SignUpPage = () => {
 						/>
 					</label>
 					<button className="btn rounded-full btn-primary text-white">
-						{/* {isPending ? "Loading..." : "Sign up"} */}
+						{isPending ? "Loading..." : "Sign up"}
 					</button>
-					{/* {isError && <p className="text-red-500">{error.message}</p>} */}
+					{isError && <p className="text-red-500">{error.message}</p>}
 				</form>
 				<div className="flex flex-col lg:w-2/3 gap-2 mt-4">
 					<p className="text-white text-lg">Already have an account?</p>

@@ -10,7 +10,7 @@ import Sidebar from "./components/common/Sidebar";
 import RightPanel from "./components/common/RightPanel";
 
 const App = () => {
-	const [authUser, setauthUser] = useState(true);
+	const [authUser, setauthUser] = useState(false);
 	return (
 		<BrowserRouter>
 			<div className="flex max-w-full mx-auto">
