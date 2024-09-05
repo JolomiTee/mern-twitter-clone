@@ -10,7 +10,7 @@ export interface INotification {
 const notificationSchema = new mongoose.Schema<INotification>({
 	from: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "user",
+		ref: "User",
 		required: true,
 	},
 	to: {

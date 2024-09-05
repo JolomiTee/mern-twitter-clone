@@ -1,11 +1,4 @@
 import { Response } from "express";
-import User from "../models/user.model";
-import Post from "../models/post.model";
-import {
-	v2 as cloudinary,
-	UploadApiErrorResponse,
-	UploadApiResponse,
-} from "cloudinary";
 import Notification from "../models/notification.model";
 
 export const getNotifications = async (req: any, res: Response) => {
@@ -15,6 +8,7 @@ export const getNotifications = async (req: any, res: Response) => {
 			path: "from",
 			select: "username profileImg",
 		});
+		await Notification.updateMany({ to: userId }, { read: true });
 		res.status(200).json(notification);
 	} catch (error) {
 		console.log(
