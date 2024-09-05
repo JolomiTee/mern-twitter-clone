@@ -32,12 +32,12 @@ const ProfilePage = () => {
 		<>
 			<div className="flex-[4_4_0]  border-r border-gray-700 min-h-screen ">
 				{/* HEADER */}
-				{(isLoading || isRefetching) && <ProfileHeaderSkeleton />}
-				{!isLoading && !isRefetching && !user && (
+				{/* {(isLoading || isRefetching) && <ProfileHeaderSkeleton />} */}
+				{/* {!isLoading && !isRefetching && !user && (
 					<p className="text-center text-lg mt-4">User not found</p>
-				)}
+				)} */}
 				<div className="flex flex-col">
-					{!isLoading && !isRefetching && user && (
+					{/* {!isLoading && !isRefetching && user && (
 						<>
 							<div className="flex gap-10 px-4 py-2 items-center">
 								<Link to="/">
@@ -50,7 +50,6 @@ const ProfilePage = () => {
 									</span>
 								</div>
 							</div>
-							{/* COVER IMG */}
 							<div className="relative group/cover">
 								<img
 									src={coverImg || user?.coverImg || "/cover.png"}
@@ -80,7 +79,6 @@ const ProfilePage = () => {
 									ref={profileImgRef}
 									onChange={(e) => handleImgChange(e, "profileImg")}
 								/>
-								{/* USER AVATAR */}
 								<div className="avatar absolute -bottom-16 left-4">
 									<div className="w-32 rounded-full relative group/avatar">
 										<img
@@ -147,7 +145,6 @@ const ProfilePage = () => {
 													rel="noreferrer"
 													className="text-sm text-blue-500 hover:underline"
 												>
-													{/* Updated this after recording the video. I forgot to update this while recording, sorry, thx. */}
 													{user?.link}
 												</a>
 											</>
@@ -196,9 +193,9 @@ const ProfilePage = () => {
 								</div>
 							</div>
 						</>
-					)}
+					)} */}
 
-					<Posts feedType={feedType} username={username} userId={user?._id} />
+					{/* <Posts feedType={feedType} username={username} userId={user?._id} /> */}
 				</div>
 			</div>
 		</>

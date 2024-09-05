@@ -6,6 +6,8 @@ import HomePage from "./pages/home/HomePage";
 import { Toaster } from "react-hot-toast";
 import NotificationPage from "./pages/notification/Notification";
 import ProfilePage from "./pages/profile/ProfilePage";
+import Sidebar from "./components/common/Sidebar";
+import RightPanel from "./components/common/RightPanel";
 
 const App = () => {
 	const [authUser, setauthUser] = useState(false);
