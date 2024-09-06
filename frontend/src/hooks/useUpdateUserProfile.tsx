@@ -1,15 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { IUser } from "../types";
 
 interface IUpdateProfileArgs {
-	[key: string]: any;
+	[key: string]: any; // Use an index signature to handle various types of data
 }
 
 const useUpdateUserProfile = () => {
 	const queryClient = useQueryClient();
 
 	const { mutateAsync: updateProfile, isPending: isUpdatingProfile } =
-		useMutation({
+		useMutation<
+			IUser, // The type of data returned from the mutation
+			Error, // The type of error that may be thrown
+			IUpdateProfileArgs // The type of data passed to the mutation function
+		>({
 			mutationFn: async (formData: IUpdateProfileArgs) => {
 				try {
 					const res = await fetch(`/api/user/update`, {

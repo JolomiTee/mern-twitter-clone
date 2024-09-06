@@ -161,17 +161,22 @@ const ProfilePage = () => {
 										{!isPending && !amIFollowing && "Follow"}
 									</button>
 								)}
-								<button
-									className="btn btn-primary rounded-full btn-sm text-white px-4 ml-2"
-									onClick={() => {
-										updateProfile({ coverImg, profileImg });
-										setProfileImg(null);
-										setCoverImg(null);
-									}}
-									disabled={isUpdatingProfile}
-								>
-									{isUpdatingProfile ? "Updating..." : "Update"}
-								</button>
+								{(coverImg || profileImg) && (
+									<button
+										className="btn btn-primary rounded-full btn-sm text-white px-4 ml-2"
+										onClick={async () => {
+											await updateProfile({
+												coverImg,
+												profileImg,
+											});
+											setProfileImg(null);
+											setCoverImg(null);
+										}}
+										disabled={isUpdatingProfile}
+									>
+										{isUpdatingProfile ? "Updating..." : "Update"}
+									</button>
+								)}
 							</div>
 
 							<div className="flex flex-col gap-4 mt-14 px-4">
