@@ -3,7 +3,7 @@ import { BiRepost } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
@@ -15,8 +15,38 @@ interface AuthUser {
 	[key: string]: any;
 }
 
+interface User {
+	_id: string;
+	fullName: string;
+	username: string;
+	profileImg: string;
+}
+
+interface Comment {
+	_id: string;
+	user: User;
+	text: string;
+	likes: string[]; // Array of user IDs who liked the comment
+}
+
+interface Post {
+	_id: string;
+	user: User; // The user who created the post
+	text: string;
+	img?: string; // Image is optional
+	comments: Comment[]; // Array of comments
+	likes: string[]; // Array of user IDs who liked the post
+	createdAt: string;
+	updatedAt: string;
+}
+
 const Post = ({ post }: any) => {
 	const [comment, setComment] = useState("");
+	const modalRef = useRef<HTMLDialogElement | null>(null);
+
+	const openModal = () => {
+		modalRef.current?.showModal(); // Safely open the modal
+	};
 	const { data: authUser } = useQuery<AuthUser>({ queryKey: ["authUser"] });
 
 	if (!authUser) return <div>Loading...</div>;
@@ -66,18 +96,19 @@ const Post = ({ post }: any) => {
 				throw new Error((error as Error).message);
 			}
 		},
-		onSuccess: (updatedLikes) => {
+		onSuccess: (updatedLikes: string[]) => {
 			// this is not the best UX, bc it will refetch all posts
 			// queryClient.invalidateQueries({ queryKey: ["posts"] });
 
 			// instead, update the cache directly for that post
-			queryClient.setQueryData(["posts"], (oldData) => {
-				// return oldData.map((p) => {
-				// 	if (p._id === post._id) {
-				// 		return { ...p, likes: updatedLikes };
-				// 	}
-				// 	return p;
-				// });
+			queryClient.setQueryData<Post[]>(["posts"], (oldData) => {
+				if (!oldData) return oldData;
+				return oldData.map((p) => {
+					if (p._id === post._id) {
+						return { ...p, likes: updatedLikes };
+					}
+					return p;
+				});
 			});
 		},
 		onError: (error) => {
@@ -180,7 +211,7 @@ const Post = ({ post }: any) => {
 						<div className="flex gap-4 items-center w-2/3 justify-between">
 							<div
 								className="flex gap-1 items-center cursor-pointer group"
-								// onClick={() => document.getElementById("comments_modal" + post._id).showModal()}
+								onClick={openModal}
 							>
 								<FaRegComment className="w-4 h-4  text-slate-500 group-hover:text-sky-400" />
 								<span className="text-sm text-slate-500 group-hover:text-sky-400">
@@ -191,6 +222,7 @@ const Post = ({ post }: any) => {
 							<dialog
 								id={`comments_modal${post._id}`}
 								className="modal border-none outline-none"
+								ref={modalRef}
 							>
 								<div className="modal-box rounded border border-gray-600">
 									<h3 className="font-bold text-lg mb-4">COMMENTS</h3>
