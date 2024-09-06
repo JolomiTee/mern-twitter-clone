@@ -1,15 +1,14 @@
-import { useState } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import SignUpPage from "./pages/auth/signup/SignUpPage";
-import LoginPage from "./pages/auth/login/LoginPage";
-import HomePage from "./pages/home/HomePage";
+import { useQuery } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import LoadingSpinner from "./components/common/LoadingSpinner";
+import RightPanel from "./components/common/RightPanel";
+import Sidebar from "./components/common/Sidebar";
+import LoginPage from "./pages/auth/login/LoginPage";
+import SignUpPage from "./pages/auth/signup/SignUpPage";
+import HomePage from "./pages/home/HomePage";
 import NotificationPage from "./pages/notification/Notification";
 import ProfilePage from "./pages/profile/ProfilePage";
-import Sidebar from "./components/common/Sidebar";
-import RightPanel from "./components/common/RightPanel";
-import { useQuery } from "@tanstack/react-query";
-import LoadingSpinner from "./components/common/LoadingSpinner";
 
 const App = () => {
 	const { data: authUser, isLoading } = useQuery({

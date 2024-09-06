@@ -3,7 +3,9 @@ import Posts from "../../components/common/Posts";
 import CreatePost from "./CreatePost";
 
 const HomePage = () => {
-	const [feedType, setFeedType] = useState("forYou");
+	const [feedType, setFeedType] = useState<
+		"forYou" | "following" | "posts" | "likes"
+	>("forYou");
 
 	return (
 		<>
