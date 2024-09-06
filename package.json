@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "MERN Twitter Clone",
 	"main": "backend/server.ts",
-	"type": "module",
+	"type": "commonjs",
 	"scripts": {
 		"dev": "NODE_ENV=development nodemon",
 		"start": "NODE_ENV=production node backend/dist/server.js",
