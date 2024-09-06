@@ -2,8 +2,15 @@ import Post from "./Post";
 import PostSkeleton from "../skeletons/PostSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { IPost } from "../../types";
 
-const Posts = ({ feedType, username, userId }: any) => {
+interface PostsProps {
+	feedType: "forYou" | "following" | "posts" | "likes";
+	username?: string;
+	userId?: string;
+}
+
+const Posts = ({ feedType, username, userId }: PostsProps) => {
 	const getPostEndpoint = () => {
 		switch (feedType) {
 			case "forYou":
@@ -26,26 +33,23 @@ const Posts = ({ feedType, username, userId }: any) => {
 		isLoading,
 		refetch,
 		isRefetching,
-	} = useQuery({
-		queryKey: ["posts"],
+	} = useQuery<IPost[]>({
+		queryKey: ["posts", feedType, username, userId],
 		queryFn: async () => {
-			try {
-				const res = await fetch(POST_ENDPOINT);
-				const data = await res.json();
+			const res = await fetch(POST_ENDPOINT);
+			const data = await res.json();
 
-				if (!res.ok) {
-					throw new Error(data.error || "Something went wrong");
-				}
-				return data;
-			} catch (error) {
-				throw new Error((error as Error).message);
+			if (!res.ok) {
+				throw new Error(data.error || "Something went wrong");
 			}
+			return data;
 		},
 	});
 
+	// Refetch posts when feedType or username changes
 	useEffect(() => {
 		refetch();
-	}, [feedType, refetch, username]);
+	}, [feedType, username, refetch]);
 
 	return (
 		<>
@@ -61,7 +65,7 @@ const Posts = ({ feedType, username, userId }: any) => {
 			)}
 			{!isLoading && !isRefetching && posts && (
 				<div>
-					{posts.map((post: any) => (
+					{posts.map((post) => (
 						<Post key={post._id} post={post} />
 					))}
 				</div>
@@ -69,4 +73,5 @@ const Posts = ({ feedType, username, userId }: any) => {
 		</>
 	);
 };
+
 export default Posts;
