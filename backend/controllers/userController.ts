@@ -53,11 +53,11 @@ export const followUnfollowUser = async (req: any, res: Response) => {
 			});
 
 			await newNotification.save();
-			res.status(200).json({ message: `${id} just followed you` });
+			res.status(200).json({ message: `You have followed user: ${id}` });
 		} else {
 			await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } });
 			await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } });
-			res.status(200).json({ message: `${id} just unfollowed you` });
+			res.status(200).json({ message: `Unfollowed user: ${id}` });
 		}
 	} catch (error) {
 		console.log("Error in followUnfollow controller", (error as Error).message);

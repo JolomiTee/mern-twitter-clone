@@ -5,9 +5,9 @@ const useFollow = () => {
 	const queryClient = useQueryClient();
 
 	const { mutate: follow, isPending } = useMutation({
-		mutationFn: async (userId) => {
+		mutationFn: async (userId: string) => {
 			try {
-				const res = await fetch(`/api/users/follow/${userId}`, {
+				const res = await fetch(`/api/user/follow/${userId}`, {
 					method: "POST",
 				});
 
@@ -17,7 +17,7 @@ const useFollow = () => {
 				}
 				return;
 			} catch (error) {
-				throw new Error(error.message);
+				throw new Error((error as Error).message);
 			}
 		},
 		onSuccess: () => {
