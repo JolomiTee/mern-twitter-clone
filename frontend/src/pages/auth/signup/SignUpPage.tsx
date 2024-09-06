@@ -1,11 +1,13 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { MdOutlineMail } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
-import { MdPassword } from "react-icons/md";
-import { MdDriveFileRenameOutline } from "react-icons/md";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { FaUser } from "react-icons/fa";
+import {
+	MdDriveFileRenameOutline,
+	MdOutlineMail,
+	MdPassword,
+} from "react-icons/md";
+import { Link } from "react-router-dom";
 import XSvg from "../../../components/svgs/X";
 
 interface SignUpData {

@@ -3,9 +3,11 @@
 	"version": "1.0.0",
 	"description": "MERN Twitter Clone",
 	"main": "backend/server.ts",
+	"type": "module",
 	"scripts": {
-		"dev": "nodemon",
-		"start": "node backend/server.ts"
+		"dev": "NODE_ENV=production nodemon",
+		"start": "NODE_ENV=production node backend/server.ts",
+		"build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
 	},
 	"keywords": [],
 	"author": {
