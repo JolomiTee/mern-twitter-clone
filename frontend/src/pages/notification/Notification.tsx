@@ -1,17 +1,50 @@
-import { Link } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 
-import { IoSettingsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
-
-import React from "react";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const NotificationPage = () => {
-   const isLoading = false;
+	const queryClient = useQueryClient();
+	const { data: notifications, isPending } = useQuery({
+		queryKey: ["notification"],
+		queryFn: async () => {
+			try {
+				const res = await fetch("/api/notifications");
+				const data = await res.json();
+				if (!res.ok) throw new Error(data.error || "Something went wrong");
+				return data;
+			} catch (error) {
+				throw new Error((error as Error).message);
+			}
+		},
+	});
+	const { mutate: deleteNotifications } = useMutation({
+		mutationFn: async () => {
+			try {
+				const res = await fetch("/api/notifications", {
+					method: "DELETE",
+				});
+				const data = await res.json();
+
+				if (!res.ok) throw new Error(data.error || "Something went wrong");
+				return data;
+			} catch (error) {
+				throw new Error((error as Error).message);
+			}
+		},
+		onSuccess: () => {
+			toast.success("Notifications Deleted");
+			queryClient.invalidateQueries({ queryKey: ["notification"] });
+		},
+		onError: (error) => {
+			toast.error(error.message);
+		},
+	});
 	return (
 		<>
 			<div className="flex-[4_4_0] border-l border-r border-gray-700 min-h-screen">
@@ -26,21 +59,23 @@ const NotificationPage = () => {
 							className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
 						>
 							<li>
-								{/* <a onClick={deleteNotifications}>Delete all notifications</a> */}
+								<a onClick={() => deleteNotifications()}>
+									Delete all notifications
+								</a>
 							</li>
 						</ul>
 					</div>
 				</div>
-				{isLoading && (
+				{isPending && (
 					<div className="flex justify-center h-full items-center">
 						<LoadingSpinner size="lg" />
 					</div>
 				)}
-				{/*
 				{notifications?.length === 0 && (
 					<div className="text-center p-4 font-bold">No notifications 🤔</div>
 				)}
-				{notifications?.map((notification) => (
+
+				{notifications?.map((notification: any) => (
 					<div className="border-b border-gray-700" key={notification._id}>
 						<div className="flex gap-2 p-4">
 							{notification.type === "follow" && (
@@ -71,7 +106,7 @@ const NotificationPage = () => {
 							</Link>
 						</div>
 					</div>
-				))} */}
+				))}
 			</div>
 		</>
 	);
