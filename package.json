@@ -5,9 +5,9 @@
 	"main": "backend/server.ts",
 	"type": "module",
 	"scripts": {
-		"dev": "NODE_ENV=production nodemon",
-		"start": "NODE_ENV=production node backend/server.ts",
-		"build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+		"dev": "NODE_ENV=development nodemon",
+		"start": "NODE_ENV=production node backend/dist/server.js",
+		"build": "npx tsc && npm install && npm install --prefix frontend && npm run build --prefix frontend"
 	},
 	"keywords": [],
 	"author": {
