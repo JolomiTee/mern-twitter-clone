@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
 import path from "path";
+import dotenv from "dotenv";
 import express, { Express } from "express";
 import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";

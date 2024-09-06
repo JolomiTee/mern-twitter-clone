@@ -1,17 +1,17 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRef, useState } from "react";
+import { toast } from "react-hot-toast";
+import { BiRepost } from "react-icons/bi";
 import {
+	FaRegBookmark,
 	FaRegComment,
 	FaRegHeart,
-	FaRegBookmark,
 	FaTrash,
 } from "react-icons/fa";
-import { BiRepost } from "react-icons/bi";
-import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
-import LoadingSpinner from "./LoadingSpinner";
-import { formatPostDate } from "../../utils/date";
 import { IPost, IUser } from "../../types";
+import { formatPostDate } from "../../utils/date";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface PostProps {
 	post: IPost;

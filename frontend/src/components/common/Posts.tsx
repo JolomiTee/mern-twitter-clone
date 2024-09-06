@@ -1,8 +1,8 @@
-import Post from "./Post";
-import PostSkeleton from "../skeletons/PostSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { IPost } from "../../types";
+import PostSkeleton from "../skeletons/PostSkeleton";
+import Post from "./Post";
 
 interface PostsProps {
 	feedType: "forYou" | "following" | "posts" | "likes";

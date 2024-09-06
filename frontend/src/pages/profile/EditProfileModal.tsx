@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { IUser } from "../../types";
 import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
+import { IUser } from "../../types";
 
 const EditProfileModal = ({ authUser }: { authUser: IUser }) => {
 	const EditProfileModalRef = useRef<HTMLDialogElement | null>(null);

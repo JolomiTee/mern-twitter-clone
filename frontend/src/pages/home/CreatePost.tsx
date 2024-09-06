@@ -1,14 +1,14 @@
-import { CiImageOn } from "react-icons/ci";
-import { BsEmojiSmileFill } from "react-icons/bs";
-import { useRef, useState } from "react";
-import { IoCloseSharp } from "react-icons/io5";
 import {
 	useMutation,
 	UseMutationResult,
 	useQuery,
 	useQueryClient,
 } from "@tanstack/react-query";
+import { useRef, useState } from "react";
 import { toast } from "react-hot-toast";
+import { BsEmojiSmileFill } from "react-icons/bs";
+import { CiImageOn } from "react-icons/ci";
+import { IoCloseSharp } from "react-icons/io5";
 
 interface CreatePostResponse {
 	[key: string]: any;
