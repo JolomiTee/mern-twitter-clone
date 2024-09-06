@@ -21,8 +21,8 @@ const Post = ({ post }: PostProps) => {
 	const { _id, createdAt, user, likes, comments, text, img } = post;
 
 	const [comment, setComment] = useState("");
-	const modalRef = useRef<HTMLDialogElement | null>(null);
 	const queryClient = useQueryClient();
+	const modalRef = useRef<HTMLDialogElement | null>(null);
 
 	const openModal = () => {
 		modalRef.current?.showModal(); // Safely open the modal

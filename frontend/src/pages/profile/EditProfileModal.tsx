@@ -1,6 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { IUser } from "../../types";
+import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
 
-const EditProfileModal = () => {
+const EditProfileModal = ({ authUser }: { authUser: IUser }) => {
+	const EditProfileModalRef = useRef<HTMLDialogElement | null>(null);
+
+	const openEditProfileModal = () => {
+		EditProfileModalRef.current?.showModal(); // Safely open the modal
+	};
 	const [formData, setFormData] = useState({
 		fullName: "",
 		username: "",
@@ -10,25 +17,46 @@ const EditProfileModal = () => {
 		newPassword: "",
 		currentPassword: "",
 	});
+
+	const { isUpdatingProfile, updateProfile } = useUpdateUserProfile();
+	const handleInputChange = (e: any) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
+
+	useEffect(() => {
+		if (authUser) {
+			setFormData({
+				fullName: authUser.fullName,
+				username: authUser.username,
+				email: authUser.email,
+				bio: authUser.bio,
+				link: authUser.link,
+				newPassword: "",
+				currentPassword: "",
+			});
+		}
+	}, [authUser]);
+
 	return (
 		<>
 			<button
 				className="btn btn-outline rounded-full btn-sm"
-				onClick={
-					() => {}
-					// document.getElementById("edit_profile_modal").showModal()
-				}
+				onClick={openEditProfileModal}
 			>
 				Edit profile
 			</button>
-			<dialog id="edit_profile_modal" className="modal">
+			<dialog
+				id="edit_profile_modal"
+				className="modal"
+				ref={EditProfileModalRef}
+			>
 				<div className="modal-box border rounded-md border-gray-700 shadow-md">
 					<h3 className="font-bold text-lg my-3">Update Profile</h3>
 					<form
 						className="flex flex-col gap-4"
 						onSubmit={(e) => {
 							e.preventDefault();
-							// updateProfile(formData);
+							updateProfile(formData);
 						}}
 					>
 						<div className="flex flex-wrap gap-2">
@@ -38,7 +66,7 @@ const EditProfileModal = () => {
 								className="flex-1 input border border-gray-700 rounded p-2 input-md"
 								value={formData.fullName}
 								name="fullName"
-								// onChange={handleInputChange}
+								onChange={handleInputChange}
 							/>
 							<input
 								type="text"
@@ -46,7 +74,7 @@ const EditProfileModal = () => {
 								className="flex-1 input border border-gray-700 rounded p-2 input-md"
 								value={formData.username}
 								name="username"
-								// onChange={handleInputChange}
+								onChange={handleInputChange}
 							/>
 						</div>
 						<div className="flex flex-wrap gap-2">
@@ -56,14 +84,14 @@ const EditProfileModal = () => {
 								className="flex-1 input border border-gray-700 rounded p-2 input-md"
 								value={formData.email}
 								name="email"
-								// onChange={handleInputChange}
+								onChange={handleInputChange}
 							/>
 							<textarea
 								placeholder="Bio"
 								className="flex-1 input border border-gray-700 rounded p-2 input-md"
 								value={formData.bio}
 								name="bio"
-								// onChange={handleInputChange}
+								onChange={handleInputChange}
 							/>
 						</div>
 						<div className="flex flex-wrap gap-2">
@@ -73,7 +101,7 @@ const EditProfileModal = () => {
 								className="flex-1 input border border-gray-700 rounded p-2 input-md"
 								value={formData.currentPassword}
 								name="currentPassword"
-								// onChange={handleInputChange}
+								onChange={handleInputChange}
 							/>
 							<input
 								type="password"
@@ -81,7 +109,7 @@ const EditProfileModal = () => {
 								className="flex-1 input border border-gray-700 rounded p-2 input-md"
 								value={formData.newPassword}
 								name="newPassword"
-								// onChange={handleInputChange}
+								onChange={handleInputChange}
 							/>
 						</div>
 						<input
@@ -90,10 +118,10 @@ const EditProfileModal = () => {
 							className="flex-1 input border border-gray-700 rounded p-2 input-md"
 							value={formData.link}
 							name="link"
-							// onChange={handleInputChange}
+							onChange={handleInputChange}
 						/>
 						<button className="btn btn-primary rounded-full btn-sm text-white">
-							{/* {isUpdatingProfile ? "Updating..." : "Update"} */}
+							{isUpdatingProfile ? "Updating..." : "Update"}
 						</button>
 					</form>
 				</div>
